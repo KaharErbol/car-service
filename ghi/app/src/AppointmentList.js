@@ -5,9 +5,10 @@ class AppointmentList extends React.Component {
         super(props);
         this.state = {
             appointments: [],
-            // inventory: [],
+            autos: [],
         };
         this.handleCancelAppointment = this.handleCancelAppointment.bind(this);
+        this.setVip = this.setVip.bind(this);
     }
 
     async componentDidMount() {
@@ -20,7 +21,66 @@ class AppointmentList extends React.Component {
                 appointments: data.appointments.filter(appointment => appointment.is_finished === false)
             })
         }
+
+        const autosUrl = 'http://localhost:8080/api/autos/';
+        const autosResponse = await fetch(autosUrl);
+        if(autosResponse.ok) {
+            const autosData = await autosResponse.json();
+            
+            const autos = autosData.autos;
+            
+
+            this.setState({autos: autos})
+        }
+
+        // set is_vip 
+        // const filteredAppontments = this.state.appointments.filter(appointment => {this.state.autos.filter(auto => {
+        //     appointment.vin === auto.import_vin;
+        // })})
+
+        // if (filteredAppontments.length > 0) {
+        //     filteredAppontments.map(filteredAppointment => this.setVip(filteredAppointment.id))
+        // }
+
+        const filteredAppointments = this.state.appointments.filter(appointment => {
+            return this.state.autos.some(auto => {
+                return appointment.vin === auto.import_vin;
+            });
+        });
+
+        if (filteredAppointments.length > 0) {
+            filteredAppointments.forEach(filteredAppointment => this.setVip(filteredAppointment.id))
+        }
     }
+
+    async setVip(appointmentId) {
+        try {
+            const url = `http://localhost:8080/api/appointments/${appointmentId}/`;
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ is_vip: true }),
+            });
+            if (response.ok) {
+                const updatedAppointment = await response.json();
+                const updatedAppointments = this.state.appointments.map((appointment) =>
+                    appointment.id === updatedAppointment.id ? updatedAppointment : appointment
+                );
+                this.setState({
+                    appointments: updatedAppointments,
+                });
+
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+    
+
 
     handleFinishAppointment = async (appointmentId) => {
         try {
@@ -92,7 +152,7 @@ class AppointmentList extends React.Component {
                                     <td>{ appointment.time }</td>
                                     <td>{ appointment.technician.name }</td>
                                     <td>{ appointment.reason }</td>
-                                    <td>{ appointment.is_vip }</td>
+                                    <td>{ appointment.is_vip ? 'YES' : 'NO' }</td>
                                     <td>
                                         <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                             <button type="button" className="btn btn-danger" onClick={() => this.handleCancelAppointment(appointment.id)} >Cancel</button>
