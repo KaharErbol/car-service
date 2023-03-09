@@ -118,6 +118,7 @@ class AppointmentListEncoder(ModelEncoder):
         "id",
         "vin",
         "customer_name",
+        "technician",
         # "date",
         # "time",
         "reason",
@@ -125,8 +126,26 @@ class AppointmentListEncoder(ModelEncoder):
         "is_vip",
     ]
 
+    encoders = {
+        "technician": TechnicianDetailEncoder(),
+    }
+
+    # def get_extra_data(self, o):
+    #     return {"technician": o.technician.name}
+
     def get_extra_data(self, o):
-        return {"technician": o.technician.name}
+        if isinstance(o.date, str) and isinstance(o.time, str):
+            return {
+                "date": o.date,
+                "time": o.time,
+                # "technician": o.technician.name,
+            }
+        else:
+            return {
+                "date": o.date.isoformat(),
+                "time": o.time.isoformat(),
+                # "technician": o.technician.name,
+            }
 
 
 class AppointmentDetailEncoder(ModelEncoder):
@@ -144,6 +163,20 @@ class AppointmentDetailEncoder(ModelEncoder):
     encoders = {
         "technician": TechnicianDetailEncoder(),
     }
+
+    def get_extra_data(self, o):
+        if isinstance(o.date, str) and isinstance(o.time, str):
+            return {
+                "date": o.date,
+                "time": o.time,
+                # "technician": o.technician.name,
+            }
+        else:
+            return {
+                "date": o.date.isoformat(),
+                "time": o.time.isoformat(),
+                # "technician": o.technician.name,
+            }
 
 
 @require_http_methods(["GET", "POST"])
@@ -176,17 +209,17 @@ def api_list_appointments(request):
 
 
 @require_http_methods(["GET", "PUT", "DELETE"])
-def api_show_appointment(request, id):
+def api_show_appointment(request, pk):
     if request.method == "GET":
-        appointment = Appointment.objects.get(id=id)
+        appointment = Appointment.objects.get(id=pk)
         return JsonResponse(
             appointment,
             encoder=AppointmentDetailEncoder,
             safe=False,
         )
-    if request.method == "DELETE":
+    elif request.method == "DELETE":
         try:
-            appointment = Appointment.objects.get(id=id)
+            appointment = Appointment.objects.get(id=pk)
             appointment.delete()
             return JsonResponse(
                 appointment,
@@ -195,6 +228,15 @@ def api_show_appointment(request, id):
             )
         except Appointment.DoesNotExist:
             return JsonResponse({"message": "Does not exist"})
+    else:
+        content = json.loads(request.body)
+        Appointment.objects.filter(id=pk).update(**content)
+        appointment = Appointment.objects.get(id=pk)
+        return JsonResponse(
+            appointment,
+            encoder=AppointmentListEncoder,
+            safe=False
+        )
 
 
 @require_http_methods(["GET", "POST"])

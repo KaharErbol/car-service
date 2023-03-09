@@ -67,8 +67,8 @@ class Technician(models.Model):
 class Appointment(models.Model):
     vin = models.CharField(max_length=17)
     customer_name = models.CharField(max_length=200)
-    date = models.DateTimeField(null=True, blank=True)
-    time = models.DateTimeField(null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
+    time = models.TimeField(null=True, blank=True)
     technician = models.ForeignKey(
         Technician,
         related_name="appointments",
@@ -79,7 +79,7 @@ class Appointment(models.Model):
     is_finished = models.BooleanField(default=False)
 
     def get_api_url(self):
-        return reverse("api_list_appointments", kwargs={"pk": self.id})
+        return reverse("api_show_appointment", kwargs={"pk": self.id})
 
     def __str__(self):
         return self.vin
