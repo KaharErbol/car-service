@@ -9,6 +9,7 @@ import TechnicianList from './TechnicianList';
 import TechnicianForm from './TechnicianForm';
 import AppointmentList from './AppointmentList';
 import AppoinementForm from './AppointmentForm';
+import SearchAppointment from './SearchAppointment';
 
 function App() {
 
@@ -18,21 +19,26 @@ function App() {
       <div className="container">
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="models">
-            <Route index element={<ModelList />}/>
-            <Route path="new" element={<ModelForm />}/>
+          <Route path='inventory'>
+            <Route path="models">
+              <Route index element={<ModelList />}/>
+              <Route path="new" element={<ModelForm />}/>
+            </Route>
+            <Route path="automobiles">
+              <Route index element={<AutomobileList />}/>
+              <Route path="new" element={<AutomobileForm />} />
+            </Route>
           </Route>
-          <Route path="automobiles">
-            <Route index element={<AutomobileList />}/>
-            <Route path="new" element={<AutomobileForm />} />
-          </Route>
-          <Route path="technicians">
-            <Route index element={<TechnicianList />} />
-            <Route path='new' element={<TechnicianForm />} />
-          </Route>
-          <Route path='appointments'>
-            <Route index element={<AppointmentList />} />
-            <Route path='new' element={<AppoinementForm />} />
+          <Route path='services'>
+            <Route path="technicians">
+              <Route index element={<TechnicianList />} />
+              <Route path='new' element={<TechnicianForm />} />
+            </Route>
+            <Route path='appointments'>
+              <Route index element={<AppointmentList />} />
+              <Route path='new' element={<AppoinementForm />} />
+              <Route path='search' element={<SearchAppointment />} />
+            </Route>
           </Route>
         </Routes>
       </div>
