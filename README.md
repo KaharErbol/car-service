@@ -24,9 +24,9 @@
 For this repository to get the code. And a docker desktop app is required to run the application. 
 After opend docker desktop appp, run the folling command line on terminal in your working project directory.
 
-`docker volume create beta-data`
-`docker-compose build`
-`docker-compose up`
+1. `docker volume create beta-data`
+2. `docker-compose build`
+3. `docker-compose up`
 
 * When you run __docker-compose up__ and if you're on macOS, you will see a **warning** about an environment variable named **OS** being missing. __You can safely ignore this__.
 
@@ -34,16 +34,17 @@ After opend docker desktop appp, run the folling command line on terminal in you
 
 ## Diagram
 
-
+![Alt text](./car-service-diagram.png)
 
 
 
 Team:
 
-* Person 1 - Which microservice?
+* Kahar - Appoinment Service
 * Person 2 - Which microservice?
 
 ## Design
+
 
 ## Service microservice
 
