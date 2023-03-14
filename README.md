@@ -1,6 +1,9 @@
-# Project CarCar
+
 
 <div align='center'>
+
+# Project CarCar
+
 ![Alt text](./CarCar.png)
 
 
@@ -20,13 +23,12 @@
 ## Instruction
 For this repository to get the code. And a docker desktop app is required to run the application. 
 After opend docker desktop appp, run the folling command line on terminal in your working project directory.
-<pre><code>
-docker volume create beta-data
-docker-compose build
-docker-compose up
-</code></pre>
 
-* When you run _docker-compose up_ and if you're on macOS, you will see a **warning** about an environment variable named *OS* being missing. __You can safely ignore this__.
+`docker volume create beta-data`
+`docker-compose build`
+`docker-compose up`
+
+* When you run __docker-compose up__ and if you're on macOS, you will see a **warning** about an environment variable named **OS** being missing. __You can safely ignore this__.
 
 <a name="diagram"></a>
 
