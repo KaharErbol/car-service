@@ -51,7 +51,7 @@ function AutomobileForm() {
 
         const response = await fetch(url, fetchConfig);
         if (response.ok) {
-            setModels([]);
+            // setModels([]);
             setColor('');
             setYear('');
             setVin('');

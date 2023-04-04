@@ -51,7 +51,7 @@ function ModelForm() {
 
         const response = await fetch(modelsUrl, fetchConfig);
         if (response.ok) {
-            setManufacturers([]);
+            // setManufacturers([]);
             setModelName('');
             setPictureUrl('');
         }

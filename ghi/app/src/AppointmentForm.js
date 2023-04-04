@@ -62,7 +62,7 @@ function AppoinementForm(){
 
         const response = await fetch(url, fetchConfig);
         if (response.ok) {
-            setTechnicians([]);
+            // setTechnicians([]);
             setCustomerName('');
             setVin('');
             setDate('');
